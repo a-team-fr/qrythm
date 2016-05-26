@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>sons/son_clair.wav</file>
+        <file>sons/son_grave.wav</file>
+        <file>images/fond_metronome_electronique.png</file>
+        <file>Metronome.qml</file>
+        <file>MainForm.qml</file>
+    </qresource>
+</RCC>
