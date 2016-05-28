@@ -15,9 +15,9 @@ Image {
         angle: angleEnCours
 
         axis {x: 0; y: 0; z: 1}
-//                Behavior on angle {
-//                    SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-//                }
+//        Behavior on angle {
+//            SpringAnimation { spring: 1; damping: 0.2; modulus: 360 }
+//        }
     }
 
     function actualisePosition ()
