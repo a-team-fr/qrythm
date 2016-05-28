@@ -3,9 +3,9 @@ import QtQuick 2.0
 Image {
     id: imageAiguille
 
-    property int angleMin: -30
-    property int angleMax: 30
-    property int angleEnCours: 0
+    property int angleMin: 150
+    property int angleMax: 210
+    property int angleEnCours: 180
 
     source: "qrc:/Images/images/aiguille.png"
 

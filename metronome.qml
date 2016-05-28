@@ -48,7 +48,7 @@ Rectangle {
             id: affichageAiguille
 
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
-            y: fondMetronome.bordBasEcran-height
+            y: fondMetronome.bordBasEcran
 
             visible: metronome.enMarche
         }
