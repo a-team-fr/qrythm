@@ -1,10 +1,29 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>sons/son_clair.wav</file>
-        <file>sons/son_grave.wav</file>
-        <file>images/fond_metronome_electronique.png</file>
         <file>Metronome.qml</file>
         <file>MainForm.qml</file>
+        <file>Aiguille.qml</file>
+    </qresource>
+    <qresource prefix="/Images">
+        <file>images/aiguille.png</file>
+        <file>images/Chiffre0.png</file>
+        <file>images/Chiffre1.png</file>
+        <file>images/Chiffre2.png</file>
+        <file>images/Chiffre3.png</file>
+        <file>images/Chiffre4.png</file>
+        <file>images/Chiffre5.png</file>
+        <file>images/Chiffre6.png</file>
+        <file>images/Chiffre7.png</file>
+        <file>images/Chiffre8.png</file>
+        <file>images/Chiffre9.png</file>
+        <file>images/fond_metronome_electronique.png</file>
+    </qresource>
+    <qresource prefix="/Sons">
+        <file>sons/son_clair.wav</file>
+        <file>sons/son_grave.wav</file>
+    </qresource>
+    <qresource prefix="/Notes">
+        <file>Notes Developpement.odt</file>
     </qresource>
 </RCC>

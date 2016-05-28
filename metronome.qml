@@ -6,7 +6,7 @@ Rectangle {
 
     property int marge: 10
     property int bpm: 60
-    property int battements: 2
+    property int tempsParMesure: 2
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
 
@@ -32,7 +32,26 @@ Rectangle {
         border.left: 15
         verticalTileMode: BorderImage.Round
         horizontalTileMode: BorderImage.Round
-        source: "images/fond_metronome_electronique.png"
+        source: "qrc:/Images/images/fond_metronome_electronique.png"
+
+        Image {
+            id: affichageTempsParMesure
+            x: fondMetronome.bordGaucheEcran
+            y: fondMetronome.bordHautEcran
+
+            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<9)
+
+            source: "qrc:/Images/images/Chiffre%1.png".arg (metronome.tempsParMesure)
+        }
+
+        Aiguille {
+            id: affichageAiguille
+
+            x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
+            y: fondMetronome.bordBasEcran-height
+
+            visible: metronome.enMarche
+        }
 
         Text {
             id: battement
@@ -52,19 +71,20 @@ Rectangle {
         repeat: true
         onTriggered: {
             temps = temps+1
-            temps=(temps>metronome.battements) ? 1 : temps
+            temps=(temps>metronome.tempsParMesure) ? 1 : temps
             jouerSon()
+            affichageAiguille.actualisePosition ()
         }
     }
 
     SoundEffect {
         id: sonClair
-        source: "qrc:/sons/son_clair.wav"
+        source: "qrc:/Sons/sons/son_clair.wav"
     }
 
     SoundEffect {
         id: sonGrave
-        source: "qrc:/sons/son_grave.wav"
+        source: "qrc:/Sons/sons/son_grave.wav"
     }
 
     function marche() {
@@ -80,7 +100,7 @@ Rectangle {
 
     function jouerSon () {
         var tempsEnCours = timerMetronome.temps
-        if (tempsEnCours==1)
+        if ((tempsEnCours==1) && (metronome.tempsParMesure>1))
             sonClair.play ()
         else
             sonGrave.play ()
