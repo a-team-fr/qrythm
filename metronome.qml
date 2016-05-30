@@ -40,7 +40,7 @@ Rectangle {
             x: fondMetronome.bordGaucheEcran
             y: fondMetronome.bordHautEcran
 
-            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<9)
+            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<=9)
 
             source: "qrc:/Images/images/Chiffre%1.png".arg (metronome.tempsParMesure)
         }
@@ -49,9 +49,9 @@ Rectangle {
             id: affichageAiguille
 
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
-            y: fondMetronome.bordBasEcran - 10
+            y: fondMetronome.bordHautEcran
 
-            visible: metronome.enMarche
+            //visible: metronome.enMarche
         }
 
         TempsMesure {
@@ -82,7 +82,7 @@ Rectangle {
             metronome.temps = metronome.temps+1
             metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
             jouerSon()
-            affichageAiguille.actualisePosition ()
+            affichageAiguille.switchState ()
         }
     }
 
@@ -99,7 +99,6 @@ Rectangle {
     function marche() {
         temps= 0
         timerMetronome.start()
-        affichageAiguille.angleEnCours=180
         console.log("Mise en route du métronome !")
     }
 
