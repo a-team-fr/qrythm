@@ -4,6 +4,7 @@
         <file>Metronome.qml</file>
         <file>MainForm.qml</file>
         <file>Aiguille.qml</file>
+        <file>TempsMesure.qml</file>
     </qresource>
     <qresource prefix="/Images">
         <file>images/aiguille.png</file>

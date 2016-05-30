@@ -22,11 +22,11 @@ Image {
 
     function actualisePosition ()
     {
-        if (angleEnCours<angleMax) {
-            angleEnCours=angleMax
-        }
-        else if (angleEnCours>angleMin) {
+        if (angleEnCours>angleMin) {
             angleEnCours=angleMin
+        }
+        else if (angleEnCours<angleMax) {
+            angleEnCours=angleMax
         }
         rotationAiguille.angle= angleEnCours
         console.log ("Rotation de l'aiguille sur l'angle %1".arg (angleEnCours))
