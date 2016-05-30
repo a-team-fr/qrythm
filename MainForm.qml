@@ -23,6 +23,19 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             bpm: valeurBPM.text*1
             tempsParMesure: valeurTempsParMesure.text*1
+            modeSilencieux: volumeSonore.modeSilencieux
+
+            Component.onCompleted: {
+                console.log("Métronome créé")
+                valeurBPM.text= metronome.bpm
+                valeurTempsParMesure.text=metronome.tempsParMesure
+                volumeSonore.modeSilencieux=metronome.modeSilencieux
+            }
+
+            Component.onDestruction: {
+                console.log("Métronome détruit")
+            }
+
         }
 
         RowLayout {
@@ -98,6 +111,22 @@ Rectangle {
                 }
             }
         }
-    }
+        RowLayout {
+            id: volumeSonore
 
+            property alias modeSilencieux: modeSilencieux.checked
+
+            spacing: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: "Mode silencieux"
+            }
+
+            Switch {
+                id: modeSilencieux
+                checked: false
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtMultimedia 5.6
+import Qt.labs.settings 1.0
 
 Rectangle {
     id: metronome
@@ -8,12 +9,19 @@ Rectangle {
     property int bpm: 60
     property int tempsParMesure: 2
     property int temps: 0
+    property bool modeSilencieux: false
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
 
     height: fondMetronome.height+2*marge
     width: fondMetronome.width+2*marge
 
+    Settings {
+        id: settings
+        property alias bpm: metronome.bpm
+        property alias tempsParMesure: metronome.tempsParMesure
+        property alias modeSilencieux: metronome.modeSilencieux
+    }
 
     BorderImage {
         id: fondMetronome
@@ -109,6 +117,8 @@ Rectangle {
     }
 
     function jouerSon () {
+        if (modeSilencieux)
+            return;
         var tempsEnCours = temps
         if ((tempsEnCours==1) && (metronome.tempsParMesure>1))
             sonClair.play ()

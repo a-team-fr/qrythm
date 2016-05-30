@@ -29,6 +29,6 @@ Image {
             angleEnCours=angleMax
         }
         rotationAiguille.angle= angleEnCours
-        console.log ("Rotation de l'aiguille sur l'angle %1".arg (angleEnCours))
+//        console.log ("Rotation de l'aiguille sur l'angle %1".arg (angleEnCours))
     }
 }
