@@ -7,6 +7,7 @@ Rectangle {
     property int marge: 10
     property int bpm: 60
     property int tempsParMesure: 2
+    property int temps: 0
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
 
@@ -48,9 +49,18 @@ Rectangle {
             id: affichageAiguille
 
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
-            y: fondMetronome.bordBasEcran
+            y: fondMetronome.bordBasEcran - 10
 
             visible: metronome.enMarche
+        }
+
+        TempsMesure {
+            id: tempsMesure
+
+            x: fondMetronome.bordGaucheEcran
+            y: fondMetronome.bordBasEcran - height
+            tempsEnCours: temps
+            tempsParMesure: metronome.tempsParMesure
         }
 
         Text {
@@ -65,13 +75,12 @@ Rectangle {
     Timer {
         id: timerMetronome
 
-        property int temps: 0
 
         interval: 60000/bpm
         repeat: true
         onTriggered: {
-            temps = temps+1
-            temps=(temps>metronome.tempsParMesure) ? 1 : temps
+            metronome.temps = metronome.temps+1
+            metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
             jouerSon()
             affichageAiguille.actualisePosition ()
         }
@@ -88,8 +97,9 @@ Rectangle {
     }
 
     function marche() {
-        timerMetronome.temps= 0
+        temps= 0
         timerMetronome.start()
+        affichageAiguille.angleEnCours=180
         console.log("Mise en route du métronome !")
     }
 
@@ -99,7 +109,7 @@ Rectangle {
     }
 
     function jouerSon () {
-        var tempsEnCours = timerMetronome.temps
+        var tempsEnCours = temps
         if ((tempsEnCours==1) && (metronome.tempsParMesure>1))
             sonClair.play ()
         else
