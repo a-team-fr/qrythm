@@ -10,6 +10,7 @@ Rectangle {
     property int tempsParMesure: 2
     property int temps: 0
     property bool modeSilencieux: false
+    property double volumeSonore: 0.0
     property int nombreMesures: 0
     property bool afficheNombreMesures: true
     property alias timer: timerMetronome
@@ -23,6 +24,8 @@ Rectangle {
         property alias bpm: metronome.bpm
         property alias tempsParMesure: metronome.tempsParMesure
         property alias modeSilencieux: metronome.modeSilencieux
+        property alias volumeSonore: metronome.volumeSonore
+        property alias afficheNombreMesures: metronome.afficheNombreMesures
     }
 
     BorderImage {
@@ -118,11 +121,15 @@ Rectangle {
     SoundEffect {
         id: sonClair
         source: "qrc:/Sons/sons/son_clair.wav"
+        muted: metronome.modeSilencieux
+        volume: metronome.volumeSonore
     }
 
     SoundEffect {
         id: sonGrave
         source: "qrc:/Sons/sons/son_grave.wav"
+        muted: metronome.modeSilencieux
+        volume: metronome.volumeSonore
     }
 
     function marche() {
@@ -138,8 +145,6 @@ Rectangle {
     }
 
     function jouerSon () {
-        if (modeSilencieux)
-            return;
         var tempsEnCours = temps
         if ((tempsEnCours==1) && (metronome.tempsParMesure>1))
             sonClair.play ()

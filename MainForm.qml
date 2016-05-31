@@ -24,6 +24,7 @@ Rectangle {
             bpm: valeurBPM.text*1
             tempsParMesure: valeurTempsParMesure.text*1
             modeSilencieux: volumeSonore.modeSilencieux
+            volumeSonore: sliderVolumeSonore.value
             afficheNombreMesures: nombreMesures.afficher
 
             Component.onCompleted: {
@@ -31,6 +32,7 @@ Rectangle {
                 valeurBPM.text= metronome.bpm
                 valeurTempsParMesure.text=metronome.tempsParMesure
                 volumeSonore.modeSilencieux=metronome.modeSilencieux
+                sliderVolumeSonore.value=metronome.volumeSonore
                 nombreMesures.afficher=metronome.afficheNombreMesures
             }
 
@@ -128,6 +130,18 @@ Rectangle {
             Switch {
                 id: modeSilencieux
                 checked: false
+            }
+            Text {
+                text: "Volume"
+            }
+            Slider {
+                id: sliderVolumeSonore
+
+                width: 50
+                enabled: !metronome.modeSilencieux
+                minimumValue: 0.1
+                maximumValue: 1.0
+                value: metronome.volumeSonore
             }
         }
         RowLayout {
