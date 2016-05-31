@@ -24,12 +24,14 @@ Rectangle {
             bpm: valeurBPM.text*1
             tempsParMesure: valeurTempsParMesure.text*1
             modeSilencieux: volumeSonore.modeSilencieux
+            afficheNombreMesures: nombreMesures.afficher
 
             Component.onCompleted: {
                 console.log("Métronome créé")
                 valeurBPM.text= metronome.bpm
                 valeurTempsParMesure.text=metronome.tempsParMesure
                 volumeSonore.modeSilencieux=metronome.modeSilencieux
+                nombreMesures.afficher=metronome.afficheNombreMesures
             }
 
             Component.onDestruction: {
@@ -126,6 +128,23 @@ Rectangle {
             Switch {
                 id: modeSilencieux
                 checked: false
+            }
+        }
+        RowLayout {
+            id: nombreMesures
+
+            property alias afficher: voirNombreMesures.checked
+
+            spacing: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: "Afficher nombre mesures"
+            }
+
+            Switch {
+                id: voirNombreMesures
+                checked: true
             }
         }
     }

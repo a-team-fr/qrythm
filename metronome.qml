@@ -10,6 +10,8 @@ Rectangle {
     property int tempsParMesure: 2
     property int temps: 0
     property bool modeSilencieux: false
+    property int nombreMesures: 0
+    property bool afficheNombreMesures: true
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
 
@@ -48,7 +50,7 @@ Rectangle {
             x: fondMetronome.bordGaucheEcran
             y: fondMetronome.bordHautEcran
 
-            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<9)
+            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<=9)
 
             source: "qrc:/Images/images/Chiffre%1.png".arg (metronome.tempsParMesure)
         }
@@ -57,9 +59,9 @@ Rectangle {
             id: affichageAiguille
 
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
-            y: fondMetronome.bordBasEcran - 10
+            y: fondMetronome.bordHautEcran
 
-            visible: metronome.enMarche
+            //visible: metronome.enMarche
         }
 
         TempsMesure {
@@ -78,19 +80,38 @@ Rectangle {
             y: fondMetronome.bordHautEcran
             text: metronome.bpm
         }
+
+        Rectangle {
+            id: nombreMesures
+
+            x: fondMetronome.bordDroitEcran-width
+            y: fondMetronome.bordBasEcran-height-10
+            width: textNombreMesures.width+metronome.marge
+            height: width
+            radius: width/2
+            color: "black"
+            visible: metronome.afficheNombreMesures && metronome.enMarche
+
+            Text {
+                id: textNombreMesures
+                anchors.centerIn: parent
+                text: metronome.nombreMesures
+                color: "white"
+            }
+        }
     }
 
     Timer {
         id: timerMetronome
 
-
         interval: 60000/bpm
         repeat: true
         onTriggered: {
             metronome.temps = metronome.temps+1
+            metronome.nombreMesures = metronome.nombreMesures+1
             metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
             jouerSon()
-            affichageAiguille.actualisePosition ()
+            affichageAiguille.switchState ()
         }
     }
 
@@ -106,8 +127,8 @@ Rectangle {
 
     function marche() {
         temps= 0
+        metronome.nombreMesures=0
         timerMetronome.start()
-        affichageAiguille.angleEnCours=180
         console.log("Mise en route du métronome !")
     }
 
