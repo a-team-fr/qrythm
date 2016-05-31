@@ -161,5 +161,24 @@ Rectangle {
                 checked: true
             }
         }
+        RowLayout {
+            id:tap
+            Button {
+                id: buttonTap
+                text: qsTr("Tap")
+                enabled: metronome.enMarche
+                onClicked:{
+                    if (metronome.isInTime())
+                        tapResult.text = "bravo"
+                    else tapResult.text="loupé!"
+
+                }
+            }
+            Text{
+                id:tapResult
+                text:"tapper en rythme"
+
+            }
+        }
     }
 }
