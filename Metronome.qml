@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtMultimedia 5.6
+import Qt.labs.settings 1.0
 
 Rectangle {
     id: metronome
@@ -7,12 +8,25 @@ Rectangle {
     property int marge: 10
     property int bpm: 60
     property int tempsParMesure: 2
+    property int temps: 0
+    property bool modeSilencieux: false
+    property double volumeSonore: 0.0
+    property int nombreMesures: 0
+    property bool afficheNombreMesures: true
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
 
     height: fondMetronome.height+2*marge
     width: fondMetronome.width+2*marge
 
+    Settings {
+        id: settings
+        property alias bpm: metronome.bpm
+        property alias tempsParMesure: metronome.tempsParMesure
+        property alias modeSilencieux: metronome.modeSilencieux
+        property alias volumeSonore: metronome.volumeSonore
+        property alias afficheNombreMesures: metronome.afficheNombreMesures
+    }
 
     BorderImage {
         id: fondMetronome
@@ -39,7 +53,7 @@ Rectangle {
             x: fondMetronome.bordGaucheEcran
             y: fondMetronome.bordHautEcran
 
-            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<9)
+            visible: (metronome.tempsParMesure>0) && (metronome.tempsParMesure<=9)
 
             source: "qrc:/Images/images/Chiffre%1.png".arg (metronome.tempsParMesure)
         }
@@ -48,9 +62,18 @@ Rectangle {
             id: affichageAiguille
 
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
-            y: fondMetronome.bordBasEcran
+            y: fondMetronome.bordHautEcran
 
-            visible: metronome.enMarche
+            //visible: metronome.enMarche
+        }
+
+        TempsMesure {
+            id: tempsMesure
+
+            x: fondMetronome.bordGaucheEcran
+            y: fondMetronome.bordBasEcran - height
+            tempsEnCours: temps
+            tempsParMesure: metronome.tempsParMesure
         }
 
         Text {
@@ -60,35 +83,58 @@ Rectangle {
             y: fondMetronome.bordHautEcran
             text: metronome.bpm
         }
+
+        Rectangle {
+            id: nombreMesures
+
+            x: fondMetronome.bordDroitEcran-width
+            y: fondMetronome.bordBasEcran-height-10
+            width: textNombreMesures.width+metronome.marge
+            height: width
+            radius: width/2
+            color: "black"
+            visible: metronome.afficheNombreMesures && metronome.enMarche
+
+            Text {
+                id: textNombreMesures
+                anchors.centerIn: parent
+                text: metronome.nombreMesures
+                color: "white"
+            }
+        }
     }
 
     Timer {
         id: timerMetronome
 
-        property int temps: 0
-
         interval: 60000/bpm
         repeat: true
         onTriggered: {
-            temps = temps+1
-            temps=(temps>metronome.tempsParMesure) ? 1 : temps
+            metronome.temps = metronome.temps+1
+            metronome.nombreMesures = metronome.nombreMesures+1
+            metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
             jouerSon()
-            affichageAiguille.actualisePosition ()
+            affichageAiguille.switchState ()
         }
     }
 
     SoundEffect {
         id: sonClair
         source: "qrc:/Sons/sons/son_clair.wav"
+        muted: metronome.modeSilencieux
+        volume: metronome.volumeSonore
     }
 
     SoundEffect {
         id: sonGrave
         source: "qrc:/Sons/sons/son_grave.wav"
+        muted: metronome.modeSilencieux
+        volume: metronome.volumeSonore
     }
 
     function marche() {
-        timerMetronome.temps= 0
+        temps= 0
+        metronome.nombreMesures=0
         timerMetronome.start()
         console.log("Mise en route du métronome !")
     }
@@ -99,7 +145,7 @@ Rectangle {
     }
 
     function jouerSon () {
-        var tempsEnCours = timerMetronome.temps
+        var tempsEnCours = temps
         if ((tempsEnCours==1) && (metronome.tempsParMesure>1))
             sonClair.play ()
         else
