@@ -15,6 +15,8 @@ Rectangle {
     property bool afficheNombreMesures: true
     property alias timer: timerMetronome
     property alias enMarche: timerMetronome.running
+    property double msStartTime : new Date().getTime()
+    property double msInTimeTolerance : 50
 
     height: fondMetronome.height+2*marge
     width: fondMetronome.width+2*marge
@@ -115,6 +117,7 @@ Rectangle {
             metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
             jouerSon()
             affichageAiguille.switchState ()
+            metronome.msStartTime = new Date().getTime();
         }
     }
 
@@ -135,6 +138,7 @@ Rectangle {
     function marche() {
         temps= 0
         metronome.nombreMesures=0
+        metronome.msStartTime = new Date().getTime();
         timerMetronome.start()
         console.log("Mise en route du métronome !")
     }
@@ -150,6 +154,14 @@ Rectangle {
             sonClair.play ()
         else
             sonGrave.play ()
+    }
+
+    function isInTime(){
+        var time = (new Date().getTime() - metronome.msStartTime) % timerMetronome.interval;
+        //console.log(time);
+        if ((time > metronome.msInTimeTolerance) && (time < (timerMetronome.interval - metronome.msInTimeTolerance )))
+            return false;
+        return true;
     }
 
 }
