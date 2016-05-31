@@ -25,9 +25,10 @@ Image {
             }
         }
     ]
-    transitions:Transition{
-        NumberAnimation { properties: "rotation"; easing.type: Easing.InOutBounce}
-    }
+// Pour le moment il vaut mieux retier l'animation en attendant une meilleure solution
+//    transitions:Transition{
+//        NumberAnimation { properties: "rotation"; easing.type: Easing.InOutBounce}
+//    }
 
     function switchState ()
     {

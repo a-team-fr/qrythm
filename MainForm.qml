@@ -23,6 +23,23 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             bpm: valeurBPM.text*1
             tempsParMesure: valeurTempsParMesure.text*1
+            modeSilencieux: volumeSonore.modeSilencieux
+            volumeSonore: sliderVolumeSonore.value
+            afficheNombreMesures: nombreMesures.afficher
+
+            Component.onCompleted: {
+                console.log("Métronome créé")
+                valeurBPM.text= metronome.bpm
+                valeurTempsParMesure.text=metronome.tempsParMesure
+                volumeSonore.modeSilencieux=metronome.modeSilencieux
+                sliderVolumeSonore.value=metronome.volumeSonore
+                nombreMesures.afficher=metronome.afficheNombreMesures
+            }
+
+            Component.onDestruction: {
+                console.log("Métronome détruit")
+            }
+
         }
 
         RowLayout {
@@ -98,6 +115,51 @@ Rectangle {
                 }
             }
         }
-    }
+        RowLayout {
+            id: volumeSonore
 
+            property alias modeSilencieux: modeSilencieux.checked
+
+            spacing: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: "Mode silencieux"
+            }
+
+            Switch {
+                id: modeSilencieux
+                checked: false
+            }
+            Text {
+                text: "Volume"
+            }
+            Slider {
+                id: sliderVolumeSonore
+
+                width: 50
+                enabled: !metronome.modeSilencieux
+                minimumValue: 0.1
+                maximumValue: 1.0
+                value: metronome.volumeSonore
+            }
+        }
+        RowLayout {
+            id: nombreMesures
+
+            property alias afficher: voirNombreMesures.checked
+
+            spacing: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: "Afficher nombre mesures"
+            }
+
+            Switch {
+                id: voirNombreMesures
+                checked: true
+            }
+        }
+    }
 }
