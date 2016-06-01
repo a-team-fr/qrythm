@@ -5,7 +5,7 @@ Image {
     id: imageAiguille
 
     property int maxDevitation: 30
-
+    property int duration : 1000
     source: "qrc:/Images/images/aiguille.png"
     transformOrigin: Item.Bottom
 
@@ -26,9 +26,13 @@ Image {
         }
     ]
 // Pour le moment il vaut mieux retier l'animation en attendant une meilleure solution
-//    transitions:Transition{
-//        NumberAnimation { properties: "rotation"; easing.type: Easing.InOutBounce}
-//    }
+    transitions:Transition{
+        NumberAnimation {
+            properties: "rotation";
+            easing.type: Easing.InOutCubic
+            duration: imageAiguille.duration
+        }
+    }
 
     function switchState ()
     {
