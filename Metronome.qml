@@ -13,8 +13,8 @@ Rectangle {
     property double volumeSonore: 0.0
     property int nombreMesures: 0
     property bool afficheNombreMesures: true
-    property alias timer: timerMetronome
-    property alias enMarche: timerMetronome.running
+    property alias timer: timerAnimation
+    property alias enMarche: timerAnimation.running
     property double msStartTime : new Date().getTime()
     property double msInTimeTolerance : 50
 
@@ -62,7 +62,7 @@ Rectangle {
 
         Aiguille {
             id: affichageAiguille
-
+            duration: timerAnimation.interval
             x: fondMetronome.bordGaucheEcran+(fondMetronome.bordDroitEcran-fondMetronome.bordGaucheEcran)/2
             y: fondMetronome.bordHautEcran
 
@@ -107,22 +107,47 @@ Rectangle {
     }
 
     Timer {
-        id: timerMetronome
+        // Timer animation est décalé de 1/2 mesure
+        id: timerAnimation
 
         interval: 60000/bpm
         repeat: true
         onTriggered: {
+            timerSound.start() // il est plus court que 1/2 mesure
+            affichageAiguille.switchState ()
+            timerMetronome.start()
+            // msStartTime créé avant le timer pour pouvoir mesurer le plus ou moins
+            metronome.msStartTime = (new Date().getTime()) + timerMetronome.interval;
+        }
+
+    }
+
+    Timer {
+        // Timer Metronome, depend de l'animation: 1/2 mesure plus tard
+        id: timerMetronome
+        interval: timerAnimation.interval/2
+        repeat: false
+
+        onTriggered: {
             metronome.temps = metronome.temps+1
             metronome.nombreMesures = metronome.nombreMesures+1
             metronome.temps=(metronome.temps>metronome.tempsParMesure) ? 1 : metronome.temps
-            jouerSon()
-            affichageAiguille.switchState ()
-            metronome.msStartTime = new Date().getTime();
+            //metronome.msStartTime = new Date().getTime();
         }
+    }
+
+    Timer{
+        // Le son est activé à la moitie du timer (moins le delai du son)
+        // Quand l'aiguille passe au centre de l'animation
+        id: timerSound
+        interval: timerMetronome.interval - sonClair.delay
+        repeat: false
+        onTriggered: jouerSon()
     }
 
     SoundEffect {
         id: sonClair
+        property int delay: 50 // delay between the begining of the son and maximum noise (approx)
         source: "qrc:/Sons/sons/son_clair.wav"
         muted: metronome.modeSilencieux
         volume: metronome.volumeSonore
@@ -139,12 +164,12 @@ Rectangle {
         temps= 0
         metronome.nombreMesures=0
         metronome.msStartTime = new Date().getTime();
-        timerMetronome.start()
+        timerAnimation.start()
         console.log("Mise en route du métronome !")
     }
 
     function arret() {
-        timerMetronome.stop()
+        timerAnimation.stop()
         console.log("Arrêt du métronome !")
     }
 
@@ -162,6 +187,11 @@ Rectangle {
         if ((time > metronome.msInTimeTolerance) && (time < (timerMetronome.interval - metronome.msInTimeTolerance )))
             return false;
         return true;
+    }
+
+    function errorOnBeat(){
+        var time = (new Date().getTime() - metronome.msStartTime);
+        return time;
     }
 
 }
